@@ -9,7 +9,7 @@ print(me.get_battery())
 
 me.streamon()
 me.takeoff()
-me.send_rc_control(0, 0, 25, 0)
+me.send_rc_control(0, 0, 10, 0)
 time.sleep(2.2)
 
 
@@ -64,13 +64,13 @@ def trackFace(me, info, w, pid, pError):
     me.send_rc_control(0, fb, 0, speed)
     return error
 
-cap = cv2.VideoCapture(0)
+#cap = cv2.VideoCapture(0)
 while True:
     # _, img = cap.read()
     img = me.get_frame_read().frame
     img = cv2.resize(img, (w, h))
     img, info = findFace(img)
-    pError = trackFace( info, w, pid, pError)
+    pError = trackFace(info, w, pid, pError)
     # print("Center", info[0], "Area", info[1])
     cv2.imshow("Output", img)
     if cv2.waitKey(1) & 0xFF == ord('q'):

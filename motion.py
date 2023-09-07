@@ -83,5 +83,4 @@ def motion_set(img):
                 elif this_action == 'spin':
                     data = [0, 0, 0, 10]
 
-
     return data
