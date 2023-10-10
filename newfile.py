@@ -15,7 +15,7 @@ time.sleep(2.2)
 
 # Load YOLOv5 model
 # load()에 매개변수로 'yolov5 폴더 저장된 위치', 'custom', path = 'train된 모델', source = 'local' 순으로 와야한다.
-model = torch.hub.load('C://Users//k7403//Desktop//ProjectPython//yolov5-master', 'custom', path = 'best.pt', source='local')
+model = torch.hub.load('C://Users//k7403//Desktop//ProjectPython//yolov5-master', 'custom', path ='models/best.pt', source='local')
 
 w, h = 360, 240
 fbRange = [6200, 6800]

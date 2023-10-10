@@ -2,7 +2,7 @@ import cv2
 import torch
 
 # Load the custom YOLOv5 model
-model = torch.hub.load('C://Users//k7403//Desktop//ProjectPython//yolov5-master', 'custom', path='best.pt', source='local')
+model = torch.hub.load('C://Users//k7403//Desktop//ProjectPython//yolov5-master', 'custom', path='models/best.pt', source='local')
 
 cap = cv2.VideoCapture(0)
 
