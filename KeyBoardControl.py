@@ -29,8 +29,8 @@ def getKeyboardInput():
     if getKey("w"): ud = speed
     elif getKey("s"): ud = -speed
 
-    if getKey("a"): yv = speed
-    elif getKey("d"): yv = -speed
+    if getKey("d"): yv = speed
+    elif getKey("a"): yv = -speed
 
     if getKey("q"): command = 'land'
     if getKey("e"): command = 'takeoff'

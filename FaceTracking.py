@@ -9,9 +9,8 @@ print(me.get_battery())
 
 me.streamon()
 me.takeoff()
-me.send_rc_control(0, 0, 10, 0)
+# me.send_rc_control(0, 0, 10, 0)
 time.sleep(2.2)
-
 
 w, h = 360, 240
 fbRange = [6200, 6800]
@@ -32,31 +31,33 @@ def findFace(img):
         cy = y + h // 2
         area = w * h
         cv2.circle(img, (cx, cy), 5, (0, 255, 0), cv2.FILLED)
-        myFaceListC.append([cx, cy])
+        myFaceListC.append([cx,cy])
         myFaceListArea.append(area)
     if len(myFaceListArea) != 0:
-        i = myFaceListArea.index(max(myFaceListArea))
-        return img, [myFaceListC[i], myFaceListArea[i]]
+        i = myFaceListArea.index(max(myFaceListArea)) # 카메라를 통해 얻은 얼굴 값(리스트)중 그 면적이 제일 큰, 즉 제일 가까운 얼굴
+        return img, [myFaceListC[i],myFaceListArea[i]]
     else:
         return img, [[0, 0], 0]
 
-def trackFace(me, info, w, pid, pError):
-    area = info[1]
-    x, y = info[0]
+def trackFace(info, w, pid, pError):
+    area = info[1] # 가장 가까운 얼굴 면적
+    x, y = info[0] # 가장 가까운 얼굴 중앙 좌표값
     fb = 0
-    error = x - w//2
-    speed = pid[0]*error * pid[1] * (error-pError)
+
+    error = x - w // 2 # 얼굴의 x 좌표 값이 중앙으로부터 얼마나 떨어져 있는가 편차
+    speed = pid[0]*error + pid[1]*(error-pError)
     speed = int(np.clip(speed, -100, 100))
 
-    if area > fbRange[0] and area < fbRange[1]:
+    if area > fbRange[0] and area < fbRange[1]: # 드론이 6200에서 6800사이에 있는 경우 정지
         fb = 0
-    if area > fbRange[2]:
+    elif area> fbRange[1]:
         fb = -20
-    elif area < fbRange[0] and area != 0:
+    elif area < fbRange[0] and area != 0: #만약 앞에 아무도 없다면 area는 0이고 직진만 할 것이다
         fb = 20
 
+
     if x == 0:
-        speed = 0
+        speed = 0 
         error = 0
 
     #print(speed, fb)
@@ -66,13 +67,13 @@ def trackFace(me, info, w, pid, pError):
 
 #cap = cv2.VideoCapture(0)
 while True:
-    # _, img = cap.read()
+    #_, img = cap.read()
     img = me.get_frame_read().frame
     img = cv2.resize(img, (w, h))
     img, info = findFace(img)
     pError = trackFace(info, w, pid, pError)
-    # print("Center", info[0], "Area", info[1])
-    cv2.imshow("Output", img)
+    #print("Center", info[0], "Area", info[1]) # info의 1번쨰 인덱스, 즉 가장 가까운 얼굴의 면적 값
+    cv2.imshow("OutPut", img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         me.land()
         break
